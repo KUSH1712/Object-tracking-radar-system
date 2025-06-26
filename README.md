@@ -64,10 +64,10 @@ distance = (time × speed of sound) / 2
 ## 🖼️ Project Visuals
 
 ### 🔌 Circuit Diagram
-![Circuit Diagram](project-visuals/ckt-diagram.png)
+![Circuit Diagram](Project-visuals/ckt-diagram.png)
 
 ### 📊 Web Dashboard (Streamlit)
-![Web Dashboard](project-visuals/web-dashboard.png)
+![Web Dashboard](Project-visuals/web-dashboard.png)
 
 ---
 
