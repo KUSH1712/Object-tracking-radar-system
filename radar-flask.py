@@ -24,7 +24,7 @@ def upload():
         return jsonify({"status": "ok"})
     
     except Exception as e:
-        print("❌ Error:", e)
+        print("Error:", e)
         return jsonify({"status": "error", "message": str(e)}), 400
 
 if __name__ == "__main__":
