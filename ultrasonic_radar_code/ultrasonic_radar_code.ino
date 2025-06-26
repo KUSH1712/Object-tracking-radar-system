@@ -1,0 +1,49 @@
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+const char* ssid = "Airtel_21";
+const char* password = "Air1221";
+const char* serverName = "http://192.168.1.9:5000/upload";
+
+const int trigPin = 5;
+const int echoPin = 18;
+
+int angles[] = {0, 30, 60, 90, 120, 150, 180};
+int currentAngleIndex = 0;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000); Serial.println("Connecting...");
+  }
+  Serial.println("Connected");
+}
+
+void loop() {
+  digitalWrite(trigPin, LOW); delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH); delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  float duration = pulseIn(echoPin, HIGH);
+  float distance = duration * 0.0343 / 2;
+
+  int angle = angles[currentAngleIndex];
+  currentAngleIndex = (currentAngleIndex + 1) % (sizeof(angles) / sizeof(int));
+
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.begin(serverName);
+    http.addHeader("Content-Type", "application/json");
+
+    String json = "{\"angle\":" + String(angle) + ", \"distance\":" + String(distance) + "}";
+    int code = http.POST(json);
+    Serial.print("Sent angle "); Serial.print(angle);
+    Serial.print("°, Distance: "); Serial.print(distance); Serial.print(" cm → ");
+    Serial.println(code);
+    http.end();
+  }
+
+  delay(3000);  // adjust for better sweep timing
+}
